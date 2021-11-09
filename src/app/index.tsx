@@ -32,7 +32,7 @@ export function App() {
     <ConnectedRouter history={history}>
       <Helmet
         titleTemplate="%s - Skeleton"
-        defaultTitle={t(translations.HomePage.home())}
+        defaultTitle={t(translations.Snowball())}
       >
         <meta name="description" content="Skeleton" />
       </Helmet>

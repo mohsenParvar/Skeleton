@@ -4,20 +4,33 @@
  *
  */
 
-import React, { memo } from 'react';
+import { Grid } from "@material-ui/core";
+import { memo } from 'react';
+import { CompoundAndEarn } from './components/compoundAndEarn'
 
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { HomePageReducer, sliceKey } from './slice';
-import { homePageSaga } from './saga';
 
-interface Props {}
+interface Props { }
 
 export const HomePage = memo((props: Props) => {
-  useInjectReducer({ key: sliceKey, reducer: HomePageReducer });
-  useInjectSaga({ key: sliceKey, saga: homePageSaga });
+
   // const homePage = useSelector(selectHomePage);
   // const dispatch = useDispatch();
   // const { t, i18n } = useTranslation();
 
-  return <div className="noAlignment">home</div>;
+  return <>
+    <Grid container spacing={3}>
+      <Grid item xs={12} lg={6}>
+        <CompoundAndEarn />
+      </Grid>
+      <Grid item xs={12} lg={6}>
+        {/* <TotalLockedValue /> */}
+      </Grid>
+      <Grid item xs={12} lg={12}>
+        {/* <LastTransactions /> */}
+      </Grid>
+    </Grid>
+
+
+
+  </>;
 });
