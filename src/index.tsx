@@ -27,6 +27,9 @@ import { configureAppStore } from 'store/configureStore';
 import { ThemeProvider } from 'styles/theme/ThemeProvider';
 import { createMuiTheme, ThemeProvider as MaterialThemeProvider } from '@material-ui/core';
 import { toast, Zoom } from 'react-toastify';
+import { Web3Provider } from '@ethersproject/providers'
+import { Web3ReactProvider } from '@web3-react/core'
+
 // Observe loading of Inter (to remove 'Inter', remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
@@ -74,21 +77,27 @@ toast.configure({
   position: 'bottom-right',
   hideProgressBar: true,
 });
-
+const getLibrary = (provider) => {
+  const library = new Web3Provider(provider);
+  library.pollingInterval = 8000;
+  return library;
+}
 
 
 const ConnectedApp = ({ Component }: Props) => (
-  <Provider store={store}>
-    <MaterialThemeProvider theme={mainTheme}>
-      <ThemeProvider>
-        <HelmetProvider>
-          <React.StrictMode>
-            <Component />
-          </React.StrictMode>
-        </HelmetProvider>
-      </ThemeProvider>
-    </MaterialThemeProvider>
-  </Provider>
+  <Web3ReactProvider getLibrary={getLibrary}>
+    <Provider store={store}>
+      <MaterialThemeProvider theme={mainTheme}>
+        <ThemeProvider>
+          <HelmetProvider>
+            <React.StrictMode>
+              <Component />
+            </React.StrictMode>
+          </HelmetProvider>
+        </ThemeProvider>
+      </MaterialThemeProvider>
+    </Provider>
+  </Web3ReactProvider>
 );
 
 const render = (Component: typeof App) => {

@@ -1,6 +1,7 @@
 
 
 import { Button, Card } from "@material-ui/core"
+import { ConnectWallet } from "app/components/common/ConnectWallet"
 import { FlexSpacer } from "app/components/common/flexSpacer"
 import { SnowCard } from "app/components/common/SnowCard"
 import { translations } from "locales/i18n"
@@ -33,6 +34,7 @@ const CompoundAndEarn = () => {
         <StyledButton onClick={() => addSnobToMetamask()} color='primary' variant='contained'>
           Add SNOB to Metamask
         </StyledButton>
+        <ConnectWallet />
       </BottomWrapper>
     </StyledSnowCard>
   )

@@ -22,8 +22,18 @@ import { selectRouter } from './appSelectors';
 
 import { useTranslation } from 'react-i18next';
 import { translations } from 'locales/i18n';
+import { usePriceFetchRX } from "hooks/dataFetchHooks/priceHook";
+import { useProvidersFetchRX } from "hooks/dataFetchHooks/providersHook";
+import { useContractsFetchRX } from "hooks/dataFetchHooks/contractHook";
+import { useWeb3InfoEmitterHook } from "hooks/dataFetchHooks/web3InfoEmitterHook";
 
 export function App() {
+
+  usePriceFetchRX()
+  useProvidersFetchRX()
+  useContractsFetchRX()
+  useWeb3InfoEmitterHook()
+
   const router = useSelector(selectRouter);
   const { t } = useTranslation();
   const { location } = router
