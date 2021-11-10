@@ -23,28 +23,25 @@ const priceMessageService = {
 
 export const usePriceFetchRX = (interval = 10000) => {
 
-  const fetchPrice = useCallback(
-    async () => {
-      const CoinGeckoClient = new CoinGecko();
-      const { data: response } = await CoinGeckoClient.simple.price({
-        ids: [
-          'snowball-token',
-          'wrapped-avax',
-        ],
-        vs_currencies: ['usd'],
-        //@ts-ignore
-        include_24hr_change: [true]
-      });
+  const fetchPrice = async () => {
+    const CoinGeckoClient = new CoinGecko();
+    const { data: response } = await CoinGeckoClient.simple.price({
+      ids: [
+        'snowball-token',
+        'wrapped-avax',
+      ],
+      vs_currencies: ['usd'],
+      //@ts-ignore
+      include_24hr_change: [true]
+    });
 
-      const prices = {
-        SNOB: response['snowball-token']?.usd || 0,
-        AVAX: response['wrapped-avax']?.usd || 0,
-        SNOB24HChange: response['snowball-token']?.usd_24h_change || 0,
-      };
-      priceMessageService.send(prices);
-    },
-    [],
-  )
+    const prices = {
+      SNOB: response['snowball-token']?.usd || 0,
+      AVAX: response['wrapped-avax']?.usd || 0,
+      SNOB24HChange: response['snowball-token']?.usd_24h_change || 0,
+    };
+    priceMessageService.send(prices);
+  }
 
   const intervalTimer = useRef<any>()
 
