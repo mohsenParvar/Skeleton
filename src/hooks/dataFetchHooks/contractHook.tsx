@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { useWeb3React } from '@web3-react/core'
 import { CONTRACTS, C_CHAIN_ID } from "config";
 import SNOWBALL_ABI from 'libs/abis/snowball.json'
+import SNOWCONE_ABI from 'libs/abis/snowcone.json'
 import GAUGE_PROXY_ABI from 'libs/abis/gauge-proxy.json'
 
 import { ethers } from "ethers";
@@ -29,44 +30,51 @@ const contractsMessageService = {
   },
 };
 
-
+const snowballContract = (provider) => new ethers.Contract(CONTRACTS.SNOWBALL, SNOWBALL_ABI, provider)
+//@ts-ignore
+const snowconeContract = (provider) => new ethers.Contract(CONTRACTS.SNOWCONE, SNOWCONE_ABI, provider)
 
 export const useContractsFetchRX = (interval = 10000) => {
   const accountRef = useRef<string | null>(null)
   const providerRef = useRef<any>(null)
-  const snowballContract = () => new ethers.Contract(CONTRACTS.SNOWBALL, SNOWBALL_ABI, providerRef.current)
-  const snowconeContract = () => new ethers.Contract(CONTRACTS.SNOWCONE, SnowConeABI, providerRef.current)
+
 
   const fetchContracts = async () => {
-    const balance = await providerRef.current.getBalance(accountRef.current);
-    console.log(balance)
-    console.log(BNToFloat(balance))
+    // const balance = await providerRef.current.getBalance(accountRef.current);
+    // console.log(balance)
+    // console.log(BNToFloat(balance))
+    //@ts-ignore
+    const snowconeContract = new ethers.Contract(CONTRACTS.SNOWCONE, SNOWCONE_ABI, providerRef.current)
 
-    // try {
-
-    //   const [
-    //     snowballBalance,
-    //     snowconeBalance,
-    //     totalSnowconeValue
-    //   ] = await Promise.all([
-    //     snowballContract,
-    //     snowconeContract,
-    //     snowconeContract
-    //   ]);
-    //   console.log({
-    //     snowballBalance,
-    //     snowconeBalance,
-    //     totalSnowconeValue
-    //   })
-    // } catch (error) {
-    //   console.log(error)
-    // }
+    try {
+      console.log('requesting')
+      console.log(providerRef.current)
+      const snowballBalance = await snowconeContract.callStatic['totalSupply()']({ gasLimit: 7000000 })
+      console.log(snowballBalance)
+      //   const [
+      //     snowballBalance,
+      //     snowconeBalance,
+      //     totalSnowconeValue
+      //   ] = await Promise.all([
+      //     snowballContract,
+      //     snowconeContract,
+      //     snowconeContract
+      //   ]);
+      //   console.log({
+      //     snowballBalance,
+      //     snowconeBalance,
+      //     totalSnowconeValue
+      //   })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 
   useEffect(() => {
     const Subscription = providersSubscription.subscribe((provider) => {
-      if (provider) {
+      if (provider && provider !== 'error') {
+
         providerRef.current = provider;
         if (accountRef.current) {
           fetchContracts()
